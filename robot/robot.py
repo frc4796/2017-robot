@@ -21,20 +21,26 @@ class MyRobot(MagicRobot):
         
         # TODO: create button example here
         
-        self.component1_motor = wpilib.Talon(1)
-        self.some_motor = wpilib.Talon(2)
+     
         
-        self.joystick = wpilib.Joystick(0)
+        self.robotdrive = wpilib.RobotDrive(0,1)
+        self.xboxcontroller = wpilib.XboxController(0)
+        self.leftdoormotor = wpilib.Spark(3)
+        self.rightdoormotor = wpilib.Spark(4)
         
     def teleopPeriodic(self):
         """Place code here that does things as a result of operator
            actions"""
-        
-        try:
-            if self.joystick.getTrigger():
-                self.component2.do_something()
-        except:
-            self.onException()
+        if self.xboxcontroller.getBumper(self.xboxcontroller.Hand.kLeft):
+            self.gears.open()
+        if self.xboxcontroller.getBumper(self.xboxcontroller.Hand.kRight):
+            self.gears.close()
+            
+        #try:
+           # if self.joystick.getTrigger():
+               # self.component2.do_something()
+        #except:
+            #self.onException()
             
 if __name__ == '__main__':
     wpilib.run(MyRobot)
