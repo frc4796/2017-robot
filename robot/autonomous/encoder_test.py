@@ -16,13 +16,13 @@ class EncoderTest(AutonomousStateMachine):
         if self.drive.get_encoder_distance() > 24.0:
             self.next_state(self.drive_back)
         else:
-            self.drive.move(-0.3, 0)
+            self.drive.move(-0.7, 0)
     
     @state
     def drive_back(self):
         if self.drive.get_encoder_distance() < 0:
             self.done()
         else:
-            self.drive.move(0.3, 0)
+            self.drive.move(0.7, 0)
     
     

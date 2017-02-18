@@ -20,14 +20,15 @@ class MyRobot(MagicRobot):
     def createObjects(self):
         """Initialize all wpilib motors & sensors"""
         
-        # TODO: create button example here
+        left = wpilib.Spark(0)
+        right = wpilib.Spark(1)
+        right.setInverted(True)
+        left.setInverted(True)
         
-     
-        
-        self.robotdrive = wpilib.RobotDrive(0,1)
+        self.robotdrive = wpilib.RobotDrive(left, right)
         #self.xboxcontroller = wpilib.XboxController(0)
-        self.leftdoormotor = wpilib.Spark(3)
-        self.rightdoormotor = wpilib.Spark(4)
+        self.leftdoormotor = wpilib.Spark(2)
+        self.rightdoormotor = wpilib.Spark(3)
         self.encoder = wpilib.Encoder(0,1)
         self.stick = wpilib.Joystick(0)
         
