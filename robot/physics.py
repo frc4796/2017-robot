@@ -14,6 +14,13 @@
 
 from pyfrc.physics import drivetrains
 
+try:
+    from pyfrc.physics.visionsim import VisionSim
+except ImportError:
+    VisionSim = None
+
+from networktables import NetworkTables
+
 from components.drive import Drive
 
 
@@ -36,7 +43,30 @@ class PhysicsEngine(object):
         self.ft_per_sec = 5
         
         self.physics_controller.add_device_gyro_channel('navxmxp_spi_4_angle')
+        
+        if VisionSim is not None:
+            targets = [
+                # right
+                VisionSim.Target(16, 12, 250, 20), # angle is 122.23
+                # middle
+                VisionSim.Target(18.5, 16, 295, 65), # angle is 180
+                # left
+                VisionSim.Target(16, 20, 340, 110), # angle is -142
+            ]
             
+            self.vision = VisionSim(targets, 61.0,
+                                    1.5, 15, 2)
+        else:
+            self.vision = None
+            
+    @property
+    def nt(self):
+        try:
+            return self._nt
+        except AttributeError:
+            self._nt = NetworkTables.getTable('/')
+            return self._nt
+    
     def update_sim(self, hal_data, now, tm_diff):
         '''
             Called when the simulation parameters for the program need to be
@@ -62,3 +92,12 @@ class PhysicsEngine(object):
         # -> encoder = distance / (18.85 / 360.0)
         
         hal_data['encoder'][0]['count'] += int(distance_inches / (Drive.circumference/360.0))
+        
+        if self.vision:
+            x, y, angle = self.physics_controller.get_position()
+            
+            data = self.vision.compute(now, x, y, angle)
+            if data is not None:
+                self.nt.putNumberArray('/camera/target', data[0][:3])
+                
+        
