@@ -8,6 +8,8 @@ from magicbot import MagicRobot
 from components.drive import Drive
 from components.climber import Climber
 from components.gears import Gears
+from components.turner import Turner
+from components.camera import Camera
 
 class MyRobot(MagicRobot):
 
@@ -15,9 +17,12 @@ class MyRobot(MagicRobot):
     # Define components here
     #
 
-    drive = Drive
     climber = Climber
     gears = Gears
+    
+    camera = Camera
+    turner = Turner
+    drive = Drive
 
     practice_robot = False
 
@@ -58,6 +63,10 @@ class MyRobot(MagicRobot):
             self.gears.close()
         #if self.xboxcontroller.getBumper(self.xboxcontroller.Hand.kRight):
         #    self.gears.close()
+        
+        if self.stick.getTrigger():
+            self.camera.align()
+        
         self.drive.move(self.stick.getY(), self.stick.getX())
 
 

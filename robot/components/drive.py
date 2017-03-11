@@ -17,7 +17,9 @@ class Drive:
     def move(self,speed,rotation):
         self.speed = speed
         self.rotation = rotation
-        
+    
+    def rotate(self, rotation):
+        self.rotation = rotation
     
     def get_encoder_distance(self):
         '''Returns distance in inches'''
